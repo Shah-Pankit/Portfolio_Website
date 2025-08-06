@@ -1,0 +1,122 @@
+[
+    {
+        "name": "Python",
+        "icon": "https://img.icons8.com/fluency/48/000000/python.png"
+    },
+    {
+        "name": "Numpy",
+        "icon": "assets\\images\\skills\\numpy.png"
+    },
+    {
+        "name": "Pandas",
+        "icon": "assets\\images\\skills\\pandas.png"
+    },
+    {
+        "name": "Matplotlib",
+        "icon": "assets\\images\\skills\\matplotlib.png"
+    },
+    {
+        "name": "Scikit-Learn",
+        "icon": "assets\\images\\skills\\scikitlearn.png"
+    },
+    {
+        "name": "Tensorflow",
+        "icon": "assets\\images\\skills\\tensorflow.png"
+    },
+    {
+        "name": "Keras",
+        "icon": "assets\\images\\skills\\keras.png"
+    },
+    {
+        "name": "Pytorch",
+        "icon": "assets\\images\\skills\\pytorch.png"
+    },
+    {
+        "name": "HuggingFace",
+        "icon": "assets\\images\\skills\\hugging-face.png"
+    },
+    {
+        "name": "OpenCV",
+        "icon": "assets\\images\\skills\\opencv.png"
+    },
+    {
+        "name": "Tqdm",
+        "icon": "assets\\images\\skills\\tqdm.png"
+    },
+    {
+        "name": "Langchain",
+        "icon": "assets\\images\\skills\\langchain.png"
+    },
+    {
+        "name": "Onnx",
+        "icon": "assets\\images\\skills\\onnx.png"
+    },
+    {
+        "name": "Openai",
+        "icon": "assets\\images\\skills\\openai.png"
+    },
+    {
+        "name": "Groq",
+        "icon": "assets\\images\\skills\\groq.png"
+    }, 
+    {
+        "name": "DBeaver",
+        "icon": "assets\\images\\skills\\dbeaver.png"
+    },
+    {
+        "name": "Redis",
+        "icon": "assets\\images\\skills\\redis.png"
+    },
+    {
+        "name": "MySQL",
+        "icon": "assets\\images\\skills\\mysql.png"
+    },
+    {
+        "name": "SQLite",
+        "icon": "assets\\images\\skills\\sqlite.png"
+    },
+    {
+        "name": "Streamlit",
+        "icon": "assets\\images\\skills\\streamlit.png"
+    },
+    {
+        "name": "HTML",
+        "icon": "assets\\images\\skills\\html.png"
+    },
+    {
+        "name": "CSS",
+        "icon": "assets\\images\\skills\\css.png"
+    },
+    {
+        "name": "Javascript",
+        "icon": "assets\\images\\skills\\javascript.png"
+    },
+    {
+        "name": "FastAPI",
+        "icon": "assets\\images\\skills\\fastapi.png"
+    },
+    {
+        "name": "GitHub",
+        "icon": "assets\\images\\skills\\github.png"
+    },
+    {
+        "name": "Git VCS",
+        "icon": "assets\\images\\skills\\git.png"
+    },
+    {
+        "name": "GitLab",
+        "icon": "assets\\images\\skills\\gitlab.png"
+    },
+    {
+        "name": "AWS",
+        "icon": "assets\\images\\skills\\aws.png"
+    },
+    {
+        "name": "Docker",
+        "icon": "assets\\images\\skills\\docker.png"
+    },
+    {
+        "name": "Vercel",
+        "icon": "assets\\images\\skills\\vercel.png"
+    }
+]
