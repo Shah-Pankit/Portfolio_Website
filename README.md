@@ -1,7 +1,7 @@
 ## Portfolio-Website
 Portfolio website built using HTML5, CSS3, JavaScript, and jQuery.
 
-<a href="https://google.com" target="_blank">**Visit Now** 🚀</a> <!--update this link-->
+<a href="https://pankitshahportfolio.vercel.app/" target="_blank">**Visit Now** 🚀</a> <!--update this link-->
 
 
 ## 📌 Tech Stack
