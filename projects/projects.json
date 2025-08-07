@@ -1,48 +1,48 @@
 [
   {
-    "name": "NotyStack Android",
-    "desc": "Fully fledged android CRUD app based on different design patterns. Built using Java, XML, SQLite, Firebase, RoomDB, MVVM.",
-    "image": "notystackandroid",
+    "name": "AI News Summarizer TTS",
+    "desc": "A sleek Streamlit app that auto‑corrects company names, scrapes and summarizes the latest news, then speaks it out in Hindi via TTS.",
+    "image": "newsummarizertts",
     "category": "android",
     "links": {
-      "view": "https://www.linkedin.com/posts/jigar-sable_androiddev-androidstudio-java-activity-6955224473822199808-JT0j",
-      "code": "https://github.com/jigar-sable/notystack-android"
+      "view": "",
+      "code": "https://github.com/Shah-Pankit/News_Summarizer_TTS"
     }
   },
   {
-    "name": "SPPU Engg Prep",
-    "desc": "All in one SPPU Engineering resources. Built using Java, XML and Firebase.",
-    "image": "sppuprepandroid",
+    "name": "Fake News Classifier",
+    "desc": "LSTM-based deep learning model that detects fake news by analyzing article text, using the Kaggle Fake News dataset for training and evaluation.",
+    "image": "fakenewsclassifier",
     "category": "android",
     "links": {
-      "view": "https://www.linkedin.com/posts/jigar-sable_androiddev-androidstudio-java-activity-6955224473822199808-JT0j",
-      "code": "https://github.com/jigar-sable/sppu-prep-android"
+      "view": "",
+      "code": "https://github.com/Shah-Pankit/Kaggle-Faker-News-Classification-using-DL"
     }
   },
   {
-    "name": "NewsBox Android",
-    "desc": "Native android app built using Java, XML. Retrofit & Glide dependencies. Provides different category news.",
-    "image": "newsboxandroid",
+    "name": "Sentiment Analyzer",
+    "desc": "A Sentiment classification system using NLTK to categorize user comments into positive, neutral, or negative classes via natural language processing.",
+    "image": "sentimentanalysisnpm",
     "category": "android",
     "links": {
-      "view": "https://www.linkedin.com/posts/jigar-sable_androiddev-androidstudio-java-activity-6955224473822199808-JT0j",
-      "code": "https://github.com/jigar-sable/newsbox-android"
+      "view": "",
+      "code": "https://github.com/Shah-Pankit/NPN-Sentiment-analysis-using-NLP"
     }
   },
   {
-    "name": "Weatherly Android",
-    "desc": "Native android app built using Java, XML and Volley dependencies. Provides weather forecast.",
-    "image": "weatherlyandroid",
+    "name": "Spam Classifier",
+    "desc": "An NLP-based system using NLTK and Bag-of-Words to classify text messages as Spam or Ham.",
+    "image": "emailspamhamclassifier",
     "category": "android",
     "links": {
-      "view": "https://www.linkedin.com/posts/jigar-sable_androiddev-androidstudio-java-activity-6955224473822199808-JT0j",
-      "code": "https://github.com/jigar-sable/weatherly-android"
+      "view": "",
+      "code": "https://github.com/Shah-Pankit/SpamClassifier-using-Python-NLP-Project1-Full"
     }
   },
 {
     "name": "Laptop Price Predictor",
     "desc": "Predicts the estimate price of any laptop based on input parameters like size of RAM, CPU type, GPU type, etc. parameters entered by the user.",
-    "image": "laptoppricepredictor",
+    "image": "neuroscholar1",
     "category": "mern",
     "links": {
       "view": "",
@@ -60,17 +60,17 @@
     }
   },
 {
-    "name": "AI News Summarizer TTS",
-    "desc": "An AI tool that summarizes company news, analyzes sentiment, and converts summaries to Hindi audio using text-to-speech.",
-    "image": "newsummarizertts",
+    "name": "NeuroScholar",
+    "desc": "NeuroScholar is an AI-powered assistant that lets you chat with your PDFs and instantly extract insights, summaries, and answers from academic papers.",
+    "image": "neuroscholar",
     "category": "mern",
     "links": {
       "view": "",
-      "code": "https://github.com/Shah-Pankit/News_Summarizer_TTS"
+      "code": "https://github.com/Shah-Pankit/NeuroScholar"
     }
   },
   {
-    "name": "Easy Audio",
+    "name": "AI Audio Control",
     "desc": "Hand gesture-based system volume controller using computer vision and real-time hand tracking with OpenCV and MediaPipe.",
     "image": "volumeconroller",
     "category": "mern",
@@ -90,253 +90,113 @@
     }
   },
   {
-    "name": "JavaScript Projects Website",
-    "desc": "This website is specially build to showcase all major javaScript projects. All my javaScript based projects are in it.",
-    "image": "jspro",
+    "name": "CNN based CIFAR-10 Dataset Classification",
+    "desc": "A convolutional neural network to perform multi‑class image classification on the CIFAR‑10 dataset using deep learning techniques.",
+    "image": "cifar10cnn",
     "category": "basicweb",
     "links": {
-      "view": "https://jigar-sable.github.io/JavaScript-Projects",
-      "code": "https://github.com/jigar-sable/JavaScript-Projects"
+      "view": "",
+      "code": "https://github.com/Shah-Pankit/Multiclass-Classification-on-CIFAR-10-Dataset-using-CNN"
     }
   },
   {
-    "name": "Web UI Clones",
-    "desc": "Flipkart, YouTube, Instagram, Sololearn web UI clones using tailwindCSS.",
-    "image": "webuiclones",
+    "name": "Hand Written Digit Classification",
+    "desc": "An artificial neural network that classifies handwritten digits (0–9) from the MNIST dataset using a feedforward ANN architecture.",
+    "image": "digitrecognition",
     "category": "mern",
     "links": {
-      "view": "https://github.com/jigar-sable/web-ui-clones",
-      "code": "https://github.com/jigar-sable/web-ui-clones"
+      "view": "",
+      "code": "https://github.com/Shah-Pankit/Image-classification-on-MNIST-Dataset-using-ANN"
     }
   },
   {
-    "name": "Crypto Tracker",
-    "desc": "Crypto Tracker built using ReactJS and Chakra UI. Supports dark mode. API used coingecko.",
-    "image": "cryptotracker",
+    "name": "Breast Cancer Detection",
+    "desc": "An artificial neural network to predict breast cancer—classifying cases using relevant medical features through an ANN-based detection model.",
+    "image": "breastcancerdetection",
     "category": "mern",
     "links": {
-      "view": "https://crypto-tracker-react-project.netlify.app/",
-      "code": "https://github.com/jigar-sable/React-Projects/tree/main/crypto-tracker"
+      "view": "",
+      "code": "https://github.com/Shah-Pankit/Breast-Cancer-Detection-Prediction-using-ANN"
     }
   },
   {
-    "name": "Hulu Website",
-    "desc": "Hulu website built using NextJS and tailwindCSS. API used TMDB, deployed on vercel.",
-    "image": "hulu",
+    "name": "Credit Card Churn Prediction",
+    "desc": "An artificial neural network (ANN) model to predict credit card customer churn—identifying at-risk clients for targeted retention.",
+    "image": "creditcarnchurn",
     "category": "mern",
     "links": {
-      "view": "https://hulu-clone-jigar-sable.vercel.app/",
-      "code": "https://github.com/jigar-sable/React-Projects/tree/main/hulu-clone"
+      "view": "",
+      "code": "https://github.com/Shah-Pankit/Credit-Card-Customer-Churn-Prediction-using-ANN"
     }
   },
   {
-    "name": "Portfolio Website",
-    "desc": "Personal Portfolio Website. Don't Need Much Info About It, Just Scroll Down. You're Here Only!",
-    "image": "portfolio1",
+    "name": "Titanic Fate Forecaster",
+    "desc": "A decision-tree-based machine learning pipeline to predict Titanic passenger survival, featuring data preprocessing, exploratory analysis, feature engineering, and model training.",
+    "image": "titanicfatesurvivor",
     "category": "basicweb",
     "links": {
-      "view": "#",
-      "code": "https://github.com/jigar-sable/Portfolio-Website"
+      "view": "",
+      "code": "https://github.com/Shah-Pankit/Titanic-Dataset_Decision-Trees"
     }
   },
   {
-    "name": "Composey Website",
-    "desc": "Simple landing page website built using HTML, CSS, JavaScript and some JavaScript Libraries.",
-    "image": "composey",
+    "name": "AdmitAI – Neural Net Admission Predictor",
+    "desc": "An artificial neural network (ANN) to predict whether an applicant will be admitted, using historical admission data for training.",
+    "image": "admissionpredict",
     "category": "basicweb",
     "links": {
-      "view": "https://composey.netlify.app/",
-      "code": "https://github.com/jigar-sable/LGMVIP-WebDev"
+      "view": "",
+      "code": "https://github.com/Shah-Pankit/Admission-prediction-using-ANN"
     }
   },
   {
-    "name": "Webview App",
-    "desc": "It's an android app which uses web view component for displaying content. This app provides many different features.",
-    "image": "webviewapp",
+    "name": "USA House Price Predictor",
+    "desc": "A predictive model to estimate U.S. house prices using regression techniques on real estate features like area, bedrooms, bathrooms, and location.",
+    "image": "usahousepriceprediction",
     "category": "android",
     "links": {
-      "view": "https://github.com/jigar-sable/Android-Webview#webapp--android-webview-app",
-      "code": "https://github.com/jigar-sable/Android-Webview"
+      "view": "",
+      "code": "https://github.com/Shah-Pankit/USA_House_Price_Prediction"
     }
   },
   {
-    "name": "PHP Banking Website",
-    "desc": "Basic Banking System based on PHP and MySQL database. Made with HTML, CSS, JavaScript and backend with PHP.",
-    "image": "tsfbank",
+    "name": "Adapter vs Mouse Vision: Neural Net Classifier",
+    "desc": "A convolutional neural network to distinguish between adapters and computer mice based on image input via image processing.",
+    "image": "mouseadapterpredict",
     "category": "lamp",
     "links": {
-      "view": "https://tsfbank.rf.gd",
-      "code": "https://github.com/jigar-sable/TSF-Bank"
+      "view": "",
+      "code": "https://github.com/Shah-Pankit/Neural_Network_Project1"
     }
   },
   {
-    "name": "Bootstrap Portfolio",
-    "desc": "Portfolio built using HTML, CSS, Bootstrap, SASS and JavaScript. Customized Bootstrap using SCSS.",
-    "image": "bootstrapportfolio",
+    "name": "Apple Stock Price Prediction",
+    "desc": "A predictive model to estimate Apple’s stock prices using historical trading data and regression or time-series techniques.",
+    "image": "applestockpricepredict",
     "category": "basicweb",
     "links": {
-      "view": "#",
-      "code": "#"
+      "view": "",
+      "code": "https://github.com/Shah-Pankit/Apple_stock_price_prediction"
     }
   },
   {
-    "name": "Bootstrap Template",
-    "desc": "Basic website template built using HTML and Bootstrap.",
-    "image": "bootstraptemplate",
+    "name": "Salary Prediction using AI",
+    "desc": "A simple Linear Regression model to predict salaries from years of experience using the Salary as data.",
+    "image": "salaryprediction",
     "category": "basicweb",
     "links": {
-      "view": "#",
-      "code": "#"
+      "view": "",
+      "code": "https://github.com/Shah-Pankit/Salary_Price_prediction_By_Linear_Regression"
     }
   },
   {
-    "name": "Foodicious",
-    "desc": "Basic food website landing page built using HTML, CSS and JavaScript.",
-    "image": "foodicious",
+    "name": "TV Sales Prediction",
+    "desc": "A linear regression model to predict TV sales based solely on TV advertising spend using historical data for training.",
+    "image": "tvpricepredictor",
     "category": "basicweb",
     "links": {
-      "view": "#",
-      "code": "#"
-    }
-  },
-  {
-    "name": "Food Website",
-    "desc": "Basic food website landing page built using HTML, CSS, SASS, Bootstrap and jQuery.",
-    "image": "foodwebsite",
-    "category": "basicweb",
-    "links": {
-      "view": "#",
-      "code": "#"
-    }
-  },
-  {
-    "name": "WebChat Website",
-    "desc": "It's a web based chat app made using popular javaScript library Socket IO. Allows multiple users to connect.",
-    "image": "webchat",
-    "category": "mern",
-    "links": {
-      "view": "https://github.com/jigar-sable/WebChat#webchat",
-      "code": "https://github.com/jigar-sable/WebChat"
-    }
-  },
-  {
-    "name": "Basic Banking App",
-    "desc": "It's an android app which uses SQLite to store user accounts data. It provides feature to simply transact amount.",
-    "image": "basicbank",
-    "category": "android",
-    "links": {
-      "view": "https://github.com/jigar-sable/Basic_Banking_App#basic-banking-app",
-      "code": "https://github.com/jigar-sable/Basic_Banking_App"
-    }
-  },
-  {
-    "name": "JavaScript Issue Tracker",
-    "desc": "It provides the feature to Assign Issue With The Auto Generated Id By Using ChanceJS. Uses Local Storage.",
-    "image": "issuetrack",
-    "category": "basicweb",
-    "links": {
-      "view": "https://jigar-sable.github.io/JavaScript-Projects/projects/issuetracker",
-      "code": "https://github.com/jigar-sable/JavaScript-Projects/tree/main/projects/issuetracker"
-    }
-  },
-  {
-    "name": "PHP PBL Portal",
-    "desc": "A simple portal in which students can submit their PBL projects and faculties can view by access admin panel.",
-    "image": "phppblform",
-    "category": "lamp",
-    "links": {
-      "view": "https://github.com/jigar-sable/PHP-Projects/tree/main/pblform#pbl-portal",
-      "code": "https://github.com/jigar-sable/PHP-Projects/tree/main/pblform"
-    }
-  },
-  {
-    "name": "Link List",
-    "desc": "All major profile links in a single website. It's just like clone of link tree. Personalized and Responsive.",
-    "image": "linklist",
-    "category": "basicweb",
-    "links": {
-      "view": "https://jigar-sable.github.io/LinkList",
-      "code": "https://github.com/jigar-sable/LinkList"
-    }
-  },
-  {
-    "name": "Job Finder Dummy",
-    "desc": "It Fetch JSON Data And Allow Feature To Search Within The Content Displayed. Will be Developed By Using Live APIs.",
-    "image": "saas",
-    "category": "basicweb",
-    "links": {
-      "view": "https://jigar-sable.github.io/JavaScript-Projects/api-projects/saas-jobs",
-      "code": "https://github.com/jigar-sable/JavaScript-Projects/tree/main/api-projects/saas-jobs"
-    }
-  },
-  {
-    "name": "Old Websites",
-    "desc": "Bestwebs & ColorCoder. Two Years old websites memories. Simple with basic features.",
-    "image": "oldsites",
-    "category": "basicweb",
-    "links": {
-      "view": "#",
-      "code": "#"
-    }
-  },
-  {
-    "name": "Resistor Color Codes",
-    "desc": "Simply provides the color codes of resistors. Calculation information and about resistors.",
-    "image": "resistercolor",
-    "category": "basicweb",
-    "links": {
-      "view": "#",
-      "code": "#"
-    }
-  },
-  {
-    "name": "KIA Info Website",
-    "desc": "Basic KIA webpage displays the info about seltos product range. Specs and Image Gallery.",
-    "image": "kiaweb",
-    "category": "basicweb",
-    "links": {
-      "view": "#",
-      "code": "#"
-    }
-  },
-  {
-    "name": "Burger Shop Dummy",
-    "desc": "Basic burger shop webpage allow users to check menu and price. Dummy Order Form.",
-    "image": "burgerweb",
-    "category": "basicweb",
-    "links": {
-      "view": "#",
-      "code": "#"
-    }
-  },
-  {
-    "name": "Indian Temples",
-    "desc": "It shows temples of different sectors of India. as user clicks it will redirect to wiki of that temple for info.",
-    "image": "templeweb",
-    "category": "basicweb",
-    "links": {
-      "view": "#",
-      "code": "#"
-    }
-  },
-  {
-    "name": "Indian Temples",
-    "desc": "It shows temples of different sectors of India. as user clicks it will redirect to wiki of that temple for info.",
-    "image": "templeweb",
-    "category": "basicweb",
-    "links": {
-      "view": "#",
-      "code": "#"
-    }
-  },
-  {
-    "name": "Indian Temples",
-    "desc": "It shows temples of different sectors of India. as user clicks it will redirect to wiki of that temple for info.",
-    "image": "templeweb",
-    "category": "basicweb",
-    "links": {
-      "view": "#",
-      "code": "#"
+      "view": "",
+      "code": "https://github.com/Shah-Pankit/TV_Sales_Price_Prediction"
     }
   }
 ]
