@@ -20,11 +20,11 @@ $(document).ready(function () {
 document.addEventListener('visibilitychange',
     function () {
         if (document.visibilityState === "visible") {
-            document.title = "Projects | Portfolio Pankit Shah";
+            document.title = "Projects | Portfolio Jigar Sable";
             $("#favicon").attr("href", "/assets/images/favicon.png");
         }
         else {
-            document.title = "Thank you for viewing my portfolio! ";
+            document.title = "Come Back To Portfolio";
             $("#favicon").attr("href", "/assets/images/favhand.png");
         }
     });
@@ -56,7 +56,7 @@ function showProjects(projects) {
           <p>${project.desc}</p>
           <div class="btns">
             <a href="${project.links.view}" class="btn" target="_blank"><i class="fas fa-eye"></i> View</a>
-            <a href="${project.links.code}" class="btn" target="_blank">Github <i class="fas fa-code"></i></a>
+            <a href="${project.links.code}" class="btn" target="_blank">Code <i class="fas fa-code"></i></a>
           </div>
         </div>
       </div>

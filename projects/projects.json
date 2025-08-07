@@ -3,7 +3,7 @@
     "name": "AI News Summarizer TTS",
     "desc": "A sleek Streamlit app that auto‑corrects company names, scrapes and summarizes the latest news, then speaks it out in Hindi via TTS.",
     "image": "newsummarizertts",
-    "category": "android",
+    "category": "llm",
     "links": {
       "view": "",
       "code": "https://github.com/Shah-Pankit/News_Summarizer_TTS"
@@ -13,7 +13,7 @@
     "name": "Fake News Classifier",
     "desc": "LSTM-based deep learning model that detects fake news by analyzing article text, using the Kaggle Fake News dataset for training and evaluation.",
     "image": "fakenewsclassifier",
-    "category": "android",
+    "category": "llm",
     "links": {
       "view": "",
       "code": "https://github.com/Shah-Pankit/Kaggle-Faker-News-Classification-using-DL"
@@ -23,7 +23,7 @@
     "name": "Sentiment Analyzer",
     "desc": "A Sentiment classification system using NLTK to categorize user comments into positive, neutral, or negative classes via natural language processing.",
     "image": "sentimentanalysisnpm",
-    "category": "android",
+    "category": "llm",
     "links": {
       "view": "",
       "code": "https://github.com/Shah-Pankit/NPN-Sentiment-analysis-using-NLP"
@@ -33,7 +33,7 @@
     "name": "Spam Classifier",
     "desc": "An NLP-based system using NLTK and Bag-of-Words to classify text messages as Spam or Ham.",
     "image": "emailspamhamclassifier",
-    "category": "android",
+    "category": "llm",
     "links": {
       "view": "",
       "code": "https://github.com/Shah-Pankit/SpamClassifier-using-Python-NLP-Project1-Full"
@@ -42,8 +42,8 @@
 {
     "name": "Laptop Price Predictor",
     "desc": "Predicts the estimate price of any laptop based on input parameters like size of RAM, CPU type, GPU type, etc. parameters entered by the user.",
-    "image": "neuroscholar1",
-    "category": "mern",
+    "image": "laptoppricepredictor",
+    "category": "ml",
     "links": {
       "view": "",
       "code": "https://github.com/Shah-Pankit/Laptop-Price-Predictor"
@@ -53,7 +53,7 @@
     "name": "AI Lead Intent Scorer",
     "desc": "An AI-powered tool that automatically analyzes and scores lead intent, helping businesses prioritize high-quality prospects with data-driven insights.",
     "image": "intentscorer",
-    "category": "mern",
+    "category": "llm",
     "links": {
       "view": "",
       "code": "https://github.com/Shah-Pankit/AI-Lead-Intent-Score"
@@ -63,7 +63,7 @@
     "name": "NeuroScholar",
     "desc": "NeuroScholar is an AI-powered assistant that lets you chat with your PDFs and instantly extract insights, summaries, and answers from academic papers.",
     "image": "neuroscholar",
-    "category": "mern",
+    "category": "llm",
     "links": {
       "view": "",
       "code": "https://github.com/Shah-Pankit/NeuroScholar"
@@ -73,7 +73,7 @@
     "name": "AI Audio Control",
     "desc": "Hand gesture-based system volume controller using computer vision and real-time hand tracking with OpenCV and MediaPipe.",
     "image": "volumeconroller",
-    "category": "mern",
+    "category": "cv",
     "links": {
       "view": "",
       "code": "https://github.com/Shah-Pankit/ai-volume-controller"
@@ -83,17 +83,17 @@
     "name": "Chatbot for RMC",
     "desc": "An AI-powered chatbot that instantly answers user questions by understanding and extracting information directly from the Rajkot Municipal Corporation website in natural language.",
     "image": "test",
-    "category": "mern",
+    "category": "llm",
     "links": {
       "view": "",
       "code": "https://github.com/Shah-Pankit/Chatbot-for-RMC"
     }
   },
   {
-    "name": "CNN based CIFAR-10 Dataset Classification",
+    "name": "CIFAR-10 Dataset Classification",
     "desc": "A convolutional neural network to perform multi‑class image classification on the CIFAR‑10 dataset using deep learning techniques.",
     "image": "cifar10cnn",
-    "category": "basicweb",
+    "category": "cv",
     "links": {
       "view": "",
       "code": "https://github.com/Shah-Pankit/Multiclass-Classification-on-CIFAR-10-Dataset-using-CNN"
@@ -103,7 +103,7 @@
     "name": "Hand Written Digit Classification",
     "desc": "An artificial neural network that classifies handwritten digits (0–9) from the MNIST dataset using a feedforward ANN architecture.",
     "image": "digitrecognition",
-    "category": "mern",
+    "category": "cv",
     "links": {
       "view": "",
       "code": "https://github.com/Shah-Pankit/Image-classification-on-MNIST-Dataset-using-ANN"
@@ -113,7 +113,7 @@
     "name": "Breast Cancer Detection",
     "desc": "An artificial neural network to predict breast cancer—classifying cases using relevant medical features through an ANN-based detection model.",
     "image": "breastcancerdetection",
-    "category": "mern",
+    "category": "dl",
     "links": {
       "view": "",
       "code": "https://github.com/Shah-Pankit/Breast-Cancer-Detection-Prediction-using-ANN"
@@ -123,7 +123,7 @@
     "name": "Credit Card Churn Prediction",
     "desc": "An artificial neural network (ANN) model to predict credit card customer churn—identifying at-risk clients for targeted retention.",
     "image": "creditcarnchurn",
-    "category": "mern",
+    "category": "dl",
     "links": {
       "view": "",
       "code": "https://github.com/Shah-Pankit/Credit-Card-Customer-Churn-Prediction-using-ANN"
@@ -133,17 +133,17 @@
     "name": "Titanic Fate Forecaster",
     "desc": "A decision-tree-based machine learning pipeline to predict Titanic passenger survival, featuring data preprocessing, exploratory analysis, feature engineering, and model training.",
     "image": "titanicfatesurvivor",
-    "category": "basicweb",
+    "category": "ml",
     "links": {
       "view": "",
       "code": "https://github.com/Shah-Pankit/Titanic-Dataset_Decision-Trees"
     }
   },
   {
-    "name": "AdmitAI – Neural Net Admission Predictor",
+    "name": "Neural Net Admission Predictor",
     "desc": "An artificial neural network (ANN) to predict whether an applicant will be admitted, using historical admission data for training.",
     "image": "admissionpredict",
-    "category": "basicweb",
+    "category": "dl",
     "links": {
       "view": "",
       "code": "https://github.com/Shah-Pankit/Admission-prediction-using-ANN"
@@ -153,17 +153,17 @@
     "name": "USA House Price Predictor",
     "desc": "A predictive model to estimate U.S. house prices using regression techniques on real estate features like area, bedrooms, bathrooms, and location.",
     "image": "usahousepriceprediction",
-    "category": "android",
+    "category": "ml",
     "links": {
       "view": "",
       "code": "https://github.com/Shah-Pankit/USA_House_Price_Prediction"
     }
   },
   {
-    "name": "Adapter vs Mouse Vision: Neural Net Classifier",
+    "name": "Adapter v/s Mouse using CNN",
     "desc": "A convolutional neural network to distinguish between adapters and computer mice based on image input via image processing.",
     "image": "mouseadapterpredict",
-    "category": "lamp",
+    "category": "cv",
     "links": {
       "view": "",
       "code": "https://github.com/Shah-Pankit/Neural_Network_Project1"
@@ -173,7 +173,7 @@
     "name": "Apple Stock Price Prediction",
     "desc": "A predictive model to estimate Apple’s stock prices using historical trading data and regression or time-series techniques.",
     "image": "applestockpricepredict",
-    "category": "basicweb",
+    "category": "ml",
     "links": {
       "view": "",
       "code": "https://github.com/Shah-Pankit/Apple_stock_price_prediction"
@@ -183,7 +183,7 @@
     "name": "Salary Prediction using AI",
     "desc": "A simple Linear Regression model to predict salaries from years of experience using the Salary as data.",
     "image": "salaryprediction",
-    "category": "basicweb",
+    "category": "ml",
     "links": {
       "view": "",
       "code": "https://github.com/Shah-Pankit/Salary_Price_prediction_By_Linear_Regression"
@@ -193,7 +193,7 @@
     "name": "TV Sales Prediction",
     "desc": "A linear regression model to predict TV sales based solely on TV advertising spend using historical data for training.",
     "image": "tvpricepredictor",
-    "category": "basicweb",
+    "category": "ml",
     "links": {
       "view": "",
       "code": "https://github.com/Shah-Pankit/TV_Sales_Price_Prediction"
