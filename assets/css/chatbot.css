@@ -20,7 +20,7 @@
 #chat-window {
     position: fixed;
     bottom: 80px;
-    right: 24px;
+    left: 24px;
     width: 100%;
     max-width: 450px;
     min-height: 500px;
