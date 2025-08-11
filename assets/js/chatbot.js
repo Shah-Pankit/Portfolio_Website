@@ -1,52 +1,3 @@
-// function toggleChatbot() {
-//   const container = document.getElementById('chatbot-container');
-//   container.classList.toggle('hidden');
-// }
-
-// async function sendMessage() {
-//   const input = document.getElementById('chatbot-input');
-//   const messages = document.getElementById('chatbot-messages');
-//   const userMsg = input.value.trim();
-//   if (!userMsg) return;
-
-//   // Show user message
-//   // messages.innerHTML += `<div><strong>You:</strong> ${userMsg}</div>`;
-//   function linkify(text) {
-//   // URLs
-//   text = text.replace(/(https?:\/\/[^\s,!?()]+[^\s,!?()])/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
-//   // Emails
-//   text = text.replace(/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,})/g, '<a href="mailto:$1">$1</a>');
-//   // Phone numbers
-//   text = text.replace(/(\+91[\s\d-]{10,})/g, '<a href="tel:$1">$1</a>');
-//   return text;
-// }
-
-//   input.value = "";
-
-//   // Load chat history
-//   let chatHistory = sessionStorage.getItem("chatHistory") || "";
-
-//   const payload = {
-//     message: userMsg,
-//     history: chatHistory
-//   };
-
-//   // Call backend (we'll set this up next)
-//   const res = await fetch("http://127.0.0.1:8000/api/chat", {
-//     method: "POST",
-//     headers: { "Content-Type": "application/json" },
-//     body: JSON.stringify(payload)
-//   });
-
-//   const data = await res.json();
-
-//   // Update chat
-//   // messages.innerHTML += `<div><strong>Bot:</strong> ${data.reply}</div>`;
-//   messages.innerHTML += `<div><strong>Bot:</strong> ${linkify(data.reply)}</div>`;
-//   sessionStorage.setItem("chatHistory", data.updatedHistory);
-// }
-
-
 function toggleChat() {
   const chatWindow = document.getElementById('chat-window');
   chatWindow.classList.toggle('hidden');
@@ -62,7 +13,7 @@ async function sendMessage(event) {
   input.value = '';
 
   try {
-    const response = await fetch('https://my-portfolio-website-bot-backend.onrender.com', {
+    const response = await fetch('http://127.0.0.1:8000/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ message })
@@ -75,90 +26,51 @@ async function sendMessage(event) {
   }
 }
 
-function convertToBulletListIfNeeded(message) {
-  // Split into lines
-  const lines = message.trim().split('\n');
-
-  // Detect if all lines start with bullet-like syntax
-  const isBulletList = lines.every(line => /^(\*|-|\d+\.)\s+/.test(line));
-
-  if (!isBulletList) return message;
-
-  const listItems = lines.map(line => {
-    const cleaned = line.replace(/^(\*|-|\d+\.)\s+/, '');
-    return `<li>${cleaned}</li>`;
-  });
-
-  return `<ul>${listItems.join('')}</ul>`;
-}
-
-// function addMessage(sender, text) {
-//   const msgContainer = document.getElementById('chat-messages');
-//   const bubble = document.createElement('div');
-//   bubble.className = sender;
-
-//   // Auto format bullets if needed
-//   const formatted = convertToBulletListIfNeeded(text);
-
-//   // Linkify links and emails
-//   const linkified = formatted
-//     .replace(
-//       /((mailto:)?[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g,
-//       `<a href="mailto:$1" target="_blank" class="chat-link">$1</a>`
-//     )
-//     .replace(
-//       /(https?:\/\/[^\s<]+)/g,
-//       `<a href="$1" target="_blank" class="chat-link">$1</a>`
-//     );
-
-//   // 🔥 Wrap linkified content in a div to preserve bubble styling
-//   const innerWrapper = document.createElement('div');
-//   innerWrapper.className = 'bot-message'; // optional, for better control
-//   innerWrapper.innerHTML = linkified;
-
-//   bubble.appendChild(innerWrapper);
-//   msgContainer.appendChild(bubble);
-//   msgContainer.scrollTop = msgContainer.scrollHeight;
-// }
-
-
-// function addMessage(sender, text) {
-//   const msgContainer = document.getElementById('chat-messages');
+function convertMarkdownToHtml(text) {
+  let html = text;
   
-//   const wrapper = document.createElement('div');
-//   wrapper.className = `chat-message-wrapper ${sender}`;
-
-//   const msgBubble = document.createElement('div');
-//   msgBubble.className = `${sender}-message`;
-
-//   const formattedText = convertToBulletListIfNeeded(text);
-
-//   const linkified = formattedText
-//     .replace(
-//       /((mailto:)?[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g,
-//       `<a href="mailto:$1" target="_blank" class="chat-link">$1</a>`
-//     )
-//     .replace(
-//       /(https?:\/\/[^\s<]+)/g,
-//       `<a href="$1" target="_blank" class="chat-link">$1</a>`
-//     );
-
-//   msgBubble.innerHTML = linkified;
-
-//   const avatar = document.createElement('img');
-//   avatar.src = sender === 'user' 
-//     ? './assets/images/user.png'   // your path
-//     : './assets/images/hero.png';   // your bot icon
-//   avatar.alt = `${sender} avatar`;
-//   avatar.className = 'chat-avatar';
-
-//   wrapper.appendChild(msgBubble);
-//   wrapper.appendChild(avatar);
-
-//   msgContainer.appendChild(wrapper);
-//   msgContainer.scrollTop = msgContainer.scrollHeight;
-// }
-
+  // Convert bold text **text** to <strong>text</strong>
+  html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  
+  // Convert bullet points (lines starting with * or -) to HTML lists
+  const lines = html.split('\n');
+  const result = [];
+  let inList = false;
+  let currentList = [];
+  
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim();
+    
+    // Check if line is a bullet point (starts with * or - followed by space)
+    if (/^\s*[\*\-]\s+/.test(line)) {
+      const bulletContent = line.replace(/^\s*[\*\-]\s+/, '');
+      currentList.push(`<li>${bulletContent}</li>`);
+      
+      if (!inList) {
+        inList = true;
+      }
+    } else {
+      // If we were in a list and now we're not, close the list
+      if (inList && currentList.length > 0) {
+        result.push(`<ul>${currentList.join('')}</ul>`);
+        currentList = [];
+        inList = false;
+      }
+      
+      // Add the non-list line (skip empty lines between sections)
+      if (line) {
+        result.push(line);
+      }
+    }
+  }
+  
+  // Close any remaining list
+  if (inList && currentList.length > 0) {
+    result.push(`<ul>${currentList.join('')}</ul>`);
+  }
+  
+  return result.join('<br>');
+}
 
 function addMessage(sender, text) {
   const msgContainer = document.getElementById('chat-messages');
@@ -176,16 +88,28 @@ function addMessage(sender, text) {
   const msgBubble = document.createElement('div');
   msgBubble.className = `${sender}-message`;
 
-  // Format content
-  const formattedText = convertToBulletListIfNeeded(text);
-  const linkified = formattedText
-    .replace(
-      /((mailto:)?[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g,
-      `<a href="mailto:$1" target="_blank" class="chat-link">$1</a>`
-    )
+  let processedText = text;
+
+  // For bot messages, convert markdown to HTML
+  if (sender === 'bot') {
+    // Check if it already contains HTML
+    if (text.includes('<ul>') && text.includes('<li>')) {
+      processedText = text; // Already HTML
+    } else {
+      // Convert markdown to HTML
+      processedText = convertMarkdownToHtml(text);
+    }
+  }
+
+  // Apply linkification
+  const linkified = processedText
     .replace(
       /(https?:\/\/[^\s<]+)/g,
       `<a href="$1" target="_blank" class="chat-link">$1</a>`
+    )
+    .replace(
+      /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g,
+      `<a href="mailto:$1" class="chat-link">$1</a>`
     );
 
   msgBubble.innerHTML = linkified;
@@ -201,4 +125,37 @@ function addMessage(sender, text) {
 
   msgContainer.appendChild(wrapper);
   msgContainer.scrollTop = msgContainer.scrollHeight;
+}
+
+function linkifyText(text) {
+  // Handle HTML content more carefully
+  if (text.includes('<ul>') || text.includes('<li>')) {
+    // For HTML lists, only linkify the text content inside <li> tags
+    return text.replace(
+      /(<li[^>]*>)(.*?)(<\/li>)/gi,
+      function(match, openTag, content, closeTag) {
+        const linkifiedContent = content
+          .replace(
+            /((mailto:)?[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g,
+            `<a href="mailto:$1" target="_blank" class="chat-link">$1</a>`
+          )
+          .replace(
+            /(https?:\/\/[^\s<]+)/g,
+            `<a href="$1" target="_blank" class="chat-link">$1</a>`
+          );
+        return openTag + linkifiedContent + closeTag;
+      }
+    );
+  } else {
+    // For plain text, apply normal linkification
+    return text
+      .replace(
+        /((mailto:)?[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g,
+        `<a href="mailto:$1" target="_blank" class="chat-link">$1</a>`
+      )
+      .replace(
+        /(https?:\/\/[^\s<]+)/g,
+        `<a href="$1" target="_blank" class="chat-link">$1</a>`
+      );
+  }
 }
