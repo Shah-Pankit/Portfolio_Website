@@ -224,3 +224,130 @@ function addMessage(sender, text) {
     }
   }
 }
+
+
+// === Chat Nudge (tooltip) ===
+(function setupChatNudge() {
+  const BTN_ID = 'chat-icon';
+  const NUDGE_ID = 'chat-nudge';
+
+  // Config
+  const messages = [
+    "Have a project idea? Let’s discuss it here.",
+    "Want to know more about my work? Ask me.",
+    "Looking for a developer you can rely on? Chat now.",
+    "Explore my skills—directly from me.",
+    "Need help turning an idea into reality? Let’s talk.",
+    "Tell me your requirements—I'll explain how I can help."
+  ];
+  const showAfterMs   = 5000;    // first nudge after 5s
+  const intervalMs    = 20000;   // subsequent nudges every 20s
+  const showForMs     = 5000;    // how long it stays visible
+  const maxPerSess    = 6;       // cap per session
+  const MIN_GAP_MS    = 20000;   // hard cooldown between any two shows
+  const IGNORE_SCROLL_FOR_MS = 6000; // don’t allow scroll-nudge immediately
+
+  let timer = null;
+  let cycle = null;
+  let msgIndex = 0;
+  let lastShownAt = 0;
+  const pageLoadedAt = Date.now();
+  let shownCount = Number(sessionStorage.getItem('chat_nudges_shown') || 0);
+
+  const chatBtn = document.getElementById(BTN_ID);
+  if (!chatBtn) return;
+
+  // Create DOM once
+  let nudge = document.getElementById(NUDGE_ID);
+  if (!nudge) {
+    nudge = document.createElement('div');
+    nudge.id = NUDGE_ID;
+    nudge.innerHTML = `
+      <button class="nudge-close" aria-label="Close nudge">×</button>
+      <span class="nudge-text"></span>
+    `;
+    document.body.appendChild(nudge);
+  }
+  const nudgeText = nudge.querySelector('.nudge-text');
+
+  // Utility: is chat open?
+  function isChatOpen() {
+    const win = document.getElementById('chat-window');
+    return win && !win.classList.contains('hidden');
+  }
+
+  function canShow() {
+    if (document.hidden) return false;
+    if (isChatOpen()) return false;
+    if (shownCount >= maxPerSess) return false;
+    if (Date.now() - lastShownAt < MIN_GAP_MS) return false; // cooldown
+    return true;
+  }
+
+  // Show/Hide
+  function showNudge() {
+    if (!canShow()) return;
+
+    nudgeText.textContent = messages[msgIndex++ % messages.length];
+    nudge.classList.add('visible');
+
+    lastShownAt = Date.now();
+    shownCount += 1;
+    sessionStorage.setItem('chat_nudges_shown', String(shownCount));
+
+    setTimeout(() => nudge.classList.remove('visible'), showForMs);
+  }
+
+  // Schedule
+  function startSchedule() {
+    stopSchedule();
+    timer = setTimeout(() => {
+      showNudge(); // respects cooldown internally
+      cycle = setInterval(showNudge, intervalMs); // respects cooldown each tick
+    }, showAfterMs);
+  }
+  function stopSchedule() {
+    if (timer) { clearTimeout(timer); timer = null; }
+    if (cycle) { clearInterval(cycle); cycle = null; }
+  }
+
+  // Interactions that should pause it
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      stopSchedule();
+    } else if (!isChatOpen()) {
+      startSchedule();
+    }
+  });
+
+  chatBtn.addEventListener('click', () => {
+    // opening chat should stop nudges; closing later restarts via toggle
+    setTimeout(() => {
+      if (isChatOpen()) stopSchedule(); else startSchedule();
+    }, 0);
+  });
+
+  nudge.addEventListener('click', (e) => {
+    const target = e.target;
+    if (target.classList.contains('nudge-close')) {
+      nudge.classList.remove('visible');
+      stopSchedule();
+      return;
+    }
+    try { toggleChat(); } catch (_) {}
+  });
+
+  // Debounced scroll nudge with initial ignore window + cooldown
+  let scrollTO = null;
+  window.addEventListener('scroll', () => {
+    if (isChatOpen()) return;
+    if (Date.now() - pageLoadedAt < IGNORE_SCROLL_FOR_MS) return; // prevent “instant” nudge
+    if (scrollTO) clearTimeout(scrollTO);
+    scrollTO = setTimeout(() => {
+      showNudge(); // cooldown enforced
+    }, 900);
+  }, { passive: true });
+
+  // Kick off
+  startSchedule();
+})();
