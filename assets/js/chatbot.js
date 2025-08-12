@@ -180,7 +180,7 @@ function addMessage(sender, text) {
   wrapper.className = `chat-message-wrapper ${sender}`;
 
   const avatar = document.createElement('img');
-  avatar.src = sender === 'user' ? './assets/images/user.png' : './assets/images/hero.png';
+  avatar.src = sender === 'user' ? '/assets/images/user.png' : '/assets/images/hero.png';
   avatar.alt = `${sender} avatar`;
   avatar.className = 'chat-avatar';
 
