@@ -233,7 +233,7 @@ function addMessage(sender, text) {
 
   // Config
   const messages = [
-    "Have a project idea? Let’s discuss it here.",
+    "Have a question? Let’s discuss it here.",
     "Want to know more about my work? Ask me.",
     "Looking for a developer you can rely on? Chat now.",
     "Explore my skills—directly from me.",
