@@ -413,23 +413,39 @@
 <a href="#home" aria-label="ScrollTop" class="fas fa-angle-up" id="scroll-top"></a>
 <!-- scroll back to top -->
 
-<!-- 🧠 Chatbot Modal -->
-
+<!-- 🧠 Chatbot Trigger -->
 <div id="chat-icon" onclick="toggleChat()" title="Pankit's bot">
-  <img src="assets\images\live-chat.png" class="chatimg">
+  <img src="assets\images\live-chat.png" class="chatimg" alt="Open chat">
 </div>
 
+<!-- 🧠 Chatbot Window -->
 <div id="chat-window" class="hidden">
   <div id="chat-header">
-    <span>Pankit's Bot</span>
-    <button onclick="toggleChat()"> × </button>
+    <div class="chat-header-text">
+      <span class="chat-title">Pankit's Bot</span>
+      <div id="chat-status" class="chat-status" aria-live="polite">
+        <span class="status-dot" aria-hidden="true"></span>
+        <span class="status-label">checking…</span>
+      </div>
+    </div>
+    <button onclick="toggleChat()" aria-label="Close chat">×</button>
   </div>
+
   <div id="chat-messages"></div>
+
   <form id="chat-form" onsubmit="sendMessage(event)">
-    <input type="text" id="user-input" placeholder="Type your message..." required />
+    <input
+      type="text"
+      id="user-input"
+      placeholder="Type your message..."
+      required
+      autocomplete="off"
+      aria-label="Message"
+    />
     <button type="submit">Send</button>
   </form>
 </div>
+
 <!-- <div id="chatbot-toggle" onclick="toggleChatbot()">💬</div>
 
 <div id="chatbot-container" class="hidden">
