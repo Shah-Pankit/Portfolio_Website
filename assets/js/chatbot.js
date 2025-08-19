@@ -1,8 +1,31 @@
 // === Chat API endpoints ===
-const CHAT_ENDPOINT =
-  "https://my-portfolio-website-bot-backend.onrender.com/api/chat";
-const API_BASE = CHAT_ENDPOINT.replace(/\/api\/chat.*$/, "");
-const HEALTH_ENDPOINT = `${API_BASE}/health`; // now exists on your backend
+// const CHAT_ENDPOINT = "http://127.0.0.1:8000/api/chat"; // <— change to local
+// const API_BASE = "http://127.0.0.1:8000"; // <— add
+// const HEALTH_ENDPOINT = `${API_BASE}/health`;
+
+const API_BASE = "https://my-portfolio-website-bot-backend.onrender.com";
+const CHAT_ENDPOINT = `${API_BASE}/api/chat`;
+const HEALTH_ENDPOINT = `${API_BASE}/health`;
+
+let __userMsgCount = 0;
+let __queuedSecondMessage = null;
+let __leadFormShown = false;
+let __leadGateActive = false;
+
+
+// Session-variant form copy
+const LEAD_HEADLINES = [
+  "Before we continue—could you share a few details?",
+  "Quick detour—mind sharing a few details?",
+  "One thing before we continue—just a few details."
+];
+const LEAD_SUBCOPIES = [
+  "I’ll use this only to personalize our conversation and follow up if needed. Your info is kept private and never shared.",
+  "This helps me tailor the conversation and follow up if needed. Your info stays private and is never shared.",
+  "I’ll only use this to personalize our chat and follow up if needed. Your info is private and not shared."
+];
+const __leadHeadline = LEAD_HEADLINES[Math.floor(Math.random() * LEAD_HEADLINES.length)];
+const __leadSubcopy  = LEAD_SUBCOPIES[Math.floor(Math.random() * LEAD_SUBCOPIES.length)];
 
 // === Chat UI ===
 function toggleChat() {
@@ -11,50 +34,41 @@ function toggleChat() {
 }
 
 async function sendMessage(event) {
-  if (event && typeof event.preventDefault === "function") {
+  if (event && typeof event.preventDefault === "function")
     event.preventDefault();
+  if (__leadGateActive) return; 
+
+  // robustly find the input
+  const inputEl =
+    document.getElementById("chat-input") ||
+    document.getElementById("user-input");
+  if (!inputEl) return;
+
+  const msg = (inputEl.value || "").trim();
+  if (!msg) return;
+
+  // 2nd-message intercept (gate)
+  __userMsgCount += 1;
+  if (__userMsgCount === 2 && !__leadFormShown) {
+    __queuedSecondMessage = msg;
+    inputEl.value = "";
+    showLeadFormBubble();
+    return; // don't hit the backend yet
   }
 
-  const input = document.getElementById("user-input");
-  const message = (input?.value || "").trim();
-  if (!message) return;
-
-  addMessage("user", message);
-  if (input) input.value = "";
-
-  // ---- Cold-start: decide if this message is the "first after long idle"
-  const lastOk = _getLastOk();
-  const longInactive = _now() - lastOk > INACTIVITY_MS;
-  const handledKey = `cold_handled_${lastOk || "never"}`;
-
-  // Only consider showing banner if:
-  //  - we've been idle for a long time AND
-  //  - we haven't already shown the cold banner for THIS idle period
-  const considerColdBanner = longInactive && !_isColdHandled(handledKey);
-
-  let responseReceived = false;
-  let coldTimer = null;
-
-  // Start a delayed timer: only show banner if still waiting after COLD_SHOW_AFTER_MS
-  if (considerColdBanner) {
-    coldTimer = setTimeout(() => {
-      if (!responseReceived) showColdStartNotice();
-    }, COLD_SHOW_AFTER_MS);
-  }
+  // normal flow
+  addMessage("user", msg);
+  inputEl.value = "";
 
   try {
     const response = await fetch(CHAT_ENDPOINT, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        message,
+        message: msg,
         history: window.__chatHistory || "",
       }),
     });
-
-    responseReceived = true;
-    if (coldTimer) clearTimeout(coldTimer);
-    removeColdStartNotice();
 
     if (!response.ok) {
       setOfflineUI?.();
@@ -64,27 +78,12 @@ async function sendMessage(event) {
     const data = await response.json();
     window.__chatHistory = data.updatedHistory || "";
     addMessage("bot", data.reply || "Sorry—no reply.");
-
-    // success ⇒ mark online + mark last-success timestamp
     setOnlineUI?.();
-    _setLastOk(_now());
-
-    // We handled the cold banner decision for this idle period:
-    // mark it so we don't show it again until next long idle.
-    if (considerColdBanner) _markColdHandled(handledKey);
   } catch (err) {
-    responseReceived = true;
-    if (coldTimer) clearTimeout(coldTimer);
-    removeColdStartNotice();
-
     addMessage("bot", "Sorry—something went wrong. Please try again.");
     setOfflineUI?.();
-
-    // Even on failure, we "handled" this idle period's first attempt.
-    if (considerColdBanner) _markColdHandled(handledKey);
   }
 }
-
 
 // Renders a chat bubble with avatar; supports your existing CSS classes
 function addMessage(sender, text) {
@@ -95,7 +94,8 @@ function addMessage(sender, text) {
   wrapper.className = `chat-message-wrapper ${sender}`;
 
   const avatar = document.createElement("img");
-  avatar.src = sender === "user" ? "assets/images/user.png" : "assets/images/hero.png";
+  avatar.src =
+    sender === "user" ? "assets/images/user.png" : "assets/images/hero.png";
   avatar.alt = `${sender} avatar`;
   avatar.className = "chat-avatar";
 
@@ -116,16 +116,50 @@ function addMessage(sender, text) {
     msgBubble.innerHTML = linkified;
     wrapper.appendChild(msgBubble);
   } else {
-    // bot: bubble left, avatar right (matches your .bot layout)
-    msgBubble.innerHTML = linkified;
+    // bot: bubble left, avatar right (typed animation)
+    const typedTarget = document.createElement("span");
+    typedTarget.className = "typed-target";
+    msgBubble.appendChild(typedTarget);
+
     wrapper.appendChild(msgBubble);
     wrapper.appendChild(avatar);
-  }
 
+    // keep chat scrolled while typing
+    const msgContainer = document.getElementById("chat-messages");
+    const keepScroll = setInterval(() => {
+      if (msgContainer) msgContainer.scrollTop = msgContainer.scrollHeight;
+    }, 50);
+
+    const finish = () => clearInterval(keepScroll);
+
+    // Prefer typed.js (already in your <head>); fallback to manual typing
+    if (window.Typed) {
+      /* types HTML safely */
+      new Typed(typedTarget, {
+        strings: [linkified],
+        typeSpeed: 12,
+        backSpeed: 0,
+        smartBackspace: false,
+        showCursor: false,
+        contentType: "html",
+        onComplete: finish,
+      });
+    } else {
+      // fallback: naive char-by-char
+      const s = linkified;
+      let i = 0;
+      const t = setInterval(() => {
+        typedTarget.innerHTML = s.slice(0, ++i);
+        if (i >= s.length) {
+          clearInterval(t);
+          finish();
+        }
+      }, 12);
+    }
+  }
   msgContainer.appendChild(wrapper);
   msgContainer.scrollTop = msgContainer.scrollHeight;
 }
-
 
 // === Helpers: convert + linkify ===
 function convertMarkdownToHtml(text) {
@@ -189,6 +223,38 @@ function linkifyText(text) {
       /(https?:\/\/[^\s<]+)/g,
       `<a href="$1" target="_blank" class="chat-link">$1</a>`
     );
+}
+
+function blockEnterHandler(e) {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+}
+
+function disableChatInput(disabled) {
+  const form = document.getElementById("chat-form");
+  const input =
+    document.getElementById("chat-input") ||
+    document.getElementById("user-input");
+  const btn = form ? form.querySelector('button[type="submit"], button') : null;
+
+  if (input) {
+    input.disabled = disabled;
+    input.setAttribute("aria-disabled", disabled ? "true" : "false");
+    if (disabled) {
+      input.dataset.prevPlaceholder = input.placeholder || "";
+      input.placeholder = "Please complete the form above to continue…";
+      input.addEventListener("keydown", blockEnterHandler, true);
+    } else {
+      input.placeholder = input.dataset.prevPlaceholder || "";
+      input.removeEventListener("keydown", blockEnterHandler, true);
+    }
+  }
+  if (btn) {
+    btn.disabled = disabled;
+    btn.setAttribute("aria-disabled", disabled ? "true" : "false");
+  }
 }
 
 // === NEW: Typewriter animation (word-by-word) ===
@@ -278,72 +344,6 @@ async function typeListAsync(
     }
   }
 }
-
-// === Render a message (user: instant, bot: animated word-by-word) ===
-async function sendMessage(event) {
-  if (event && typeof event.preventDefault === "function") {
-    event.preventDefault();
-  }
-
-  const input = document.getElementById("user-input");
-  if (!input) return;
-
-  const message = (input.value || "").trim();
-  if (!message) return;
-
-  addMessage("user", message);
-  input.value = "";
-
-  try {
-    const response = await fetch(CHAT_ENDPOINT, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        message,
-        history: window.__chatHistory || "",
-      }),
-    });
-
-    if (!response.ok) {
-      setOfflineUI?.();
-      throw new Error("Network response was not ok");
-    }
-
-    const data = await response.json();
-    window.__chatHistory = data.updatedHistory || "";
-    addMessage("bot", data.reply || "Sorry—no reply.");
-    setOnlineUI?.();
-  } catch (error) {
-    addMessage("bot", "Sorry—something went wrong. Please try again.");
-    setOfflineUI?.();
-  }
-}
-
-
-// Wire handlers once the DOM is ready
-document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("chat-form");
-  const input = document.getElementById("user-input");
-  const sendBtn = form ? form.querySelector('button[type="submit"]') : null;
-
-  // Let the form submission call sendMessage (Enter key included)
-  if (form) form.addEventListener("submit", sendMessage);
-
-  // Clicking the button also calls sendMessage
-  if (sendBtn) sendBtn.addEventListener("click", sendMessage);
-
-  // Enter sends; Shift+Enter would allow multiline if you ever switch to <textarea>
-  if (input) {
-    input.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" && !e.shiftKey) {
-        e.preventDefault();
-        sendMessage(e);
-      }
-    });
-  }
-});
-
-
 
 // === Chat Nudge (tooltip) ===
 (function setupChatNudge() {
@@ -511,16 +511,21 @@ function setOfflineUI() {
 async function probeHealth() {
   // Belt
   try {
-    const res = await fetch(HEALTH_ENDPOINT, { method: "GET", cache: "no-store" });
+    const res = await fetch(HEALTH_ENDPOINT, {
+      method: "GET",
+      cache: "no-store",
+    });
     if (res.ok) return true;
-  } catch (_) { /* ignore */ }
+  } catch (_) {
+    /* ignore */
+  }
 
   // Suspenders
   try {
     const res = await fetch(CHAT_ENDPOINT + "?ping=1", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: "__ping__", healthCheck: true })
+      body: JSON.stringify({ message: "__ping__", healthCheck: true }),
     });
     return res.ok;
   } catch (_) {
@@ -530,7 +535,8 @@ async function probeHealth() {
 
 async function updateBotStatus() {
   const ok = await probeHealth();
-  if (ok) setOnlineUI(); else setOfflineUI();
+  if (ok) setOnlineUI();
+  else setOfflineUI();
 }
 
 // Kick off and poll every 30s (pause when tab hidden to save battery)
@@ -548,17 +554,23 @@ async function updateBotStatus() {
   }
 
   start();
-  document.addEventListener("visibilitychange", () => {
-    if (document.hidden) stop(); else start();
-  }, { passive: true });
+  document.addEventListener(
+    "visibilitychange",
+    () => {
+      if (document.hidden) stop();
+      else start();
+    },
+    { passive: true }
+  );
 })();
 
-
 // --- Cold-start detection config ---
-const INACTIVITY_MS = 15 * 60 * 1000;    // 15 minutes of no successful replies
-const COLD_SHOW_AFTER_MS = 1500;         // show banner only if still waiting after 1.5s
+const INACTIVITY_MS = 15 * 60 * 1000; // 15 minutes of no successful replies
+const COLD_SHOW_AFTER_MS = 1500; // show banner only if still waiting after 1.5s
 
-function _now() { return Date.now(); }
+function _now() {
+  return Date.now();
+}
 function _getLastOk() {
   return Number(localStorage.getItem("chat_last_success_at") || 0);
 }
@@ -604,4 +616,221 @@ function removeColdStartNotice() {
     _coldBannerEl.parentNode.removeChild(_coldBannerEl);
   }
   _coldBannerEl = null;
+}
+
+function showLeadFormBubble() {
+  __leadFormShown = true;
+  __leadGateActive = true; // gate chat until submit succeeds
+  disableChatInput(true); // disable input + button + Enter
+
+  const msgContainer = document.getElementById("chat-messages");
+  const wrap = document.createElement("div");
+  wrap.className = "msg-row bot";
+  wrap.innerHTML = `
+    <div class="msg-bubble lead-form-bubble">
+      <div class="lead-copy">
+        <p><strong>${__leadHeadline}</strong></p>
+        <p style="margin-top:6px;">${__leadSubcopy}</p>
+      </div>
+
+      <form id="lead-form" class="lead-form">
+        <div class="lead-field">
+          <label>Name*</label>
+          <input type="text" name="name" required
+                 inputmode="text" pattern="[A-Za-z ]+"
+                 title="Letters and spaces only"
+                 autocomplete="name" autocapitalize="none" spellcheck="false" />
+        </div>
+
+        <div class="lead-field">
+          <label>Email*</label>
+          <input type="email" name="email" required
+                 autocomplete="email"
+                 autocapitalize="none" autocorrect="off" spellcheck="false" />
+        </div>
+
+        <div class="lead-field">
+          <label>Company*</label>
+          <input type="text" name="company" required
+                 autocomplete="organization"
+                 autocapitalize="none" spellcheck="false" />
+        </div>
+
+        <div class="lead-field">
+          <label>Position*</label>
+          <input type="text" name="position" required
+                 inputmode="text" pattern="[A-Za-z ]+"
+                 title="Letters and spaces only"
+                 autocapitalize="none" spellcheck="false" />
+        </div>
+
+        <div class="lead-field">
+          <label>Role (Optional)</label>
+          <input type="text" name="role"
+                 inputmode="text" pattern="[A-Za-z. ]+"
+                 title="Letters, periods, and spaces only"
+                 autocapitalize="none" spellcheck="false" />
+        </div>
+
+        <button type="submit" class="lead-submit">Submit</button>
+      </form>
+
+      <div id="lead-status" class="lead-status" aria-live="polite"></div>
+    </div>
+  `;
+  msgContainer.appendChild(wrap);
+  msgContainer.scrollTop = msgContainer.scrollHeight;
+
+  // --- NEW: stagger the field animations via CSS custom delays
+  const form = wrap.querySelector("#lead-form");
+  const rows = Array.from(form.querySelectorAll(".lead-field"));
+  rows.forEach((el, i) => el.style.setProperty("--delay", `${120 + i * 70}ms`));
+  const submitBtn = form.querySelector(".lead-submit");
+  if (submitBtn)
+    submitBtn.style.setProperty("--delay", `${120 + rows.length * 70}ms`);
+
+  // inputs
+  const emailEl = form.querySelector('input[name="email"]');
+  const nameEl = form.querySelector('input[name="name"]');
+  const positionEl = form.querySelector('input[name="position"]');
+  const roleEl = form.querySelector('input[name="role"]');
+
+  // live normalization / filtering
+  emailEl.addEventListener("input", () => {
+    const p = emailEl.selectionStart;
+    emailEl.value = emailEl.value.toLowerCase();
+    emailEl.setSelectionRange(p, p);
+  });
+
+  nameEl.addEventListener("input", () => {
+    const c = nameEl.value.replace(/[^A-Za-z ]+/g, "");
+    if (c !== nameEl.value) {
+      const p = nameEl.selectionStart;
+      nameEl.value = c;
+      nameEl.setSelectionRange(Math.max(0, p - 1), Math.max(0, p - 1));
+    }
+  });
+
+  positionEl.addEventListener("input", () => {
+    const c = positionEl.value.replace(/[^A-Za-z ]+/g, "");
+    if (c !== positionEl.value) {
+      const p = positionEl.selectionStart;
+      positionEl.value = c;
+      positionEl.setSelectionRange(Math.max(0, p - 1), Math.max(0, p - 1));
+    }
+  });
+
+  roleEl.addEventListener("input", () => {
+    const c = roleEl.value.replace(/[^A-Za-z. ]+/g, "");
+    if (c !== roleEl.value) {
+      const p = roleEl.selectionStart;
+      roleEl.value = c;
+      roleEl.setSelectionRange(Math.max(0, p - 1), Math.max(0, p - 1));
+    }
+  });
+
+  form.addEventListener("submit", onLeadSubmit);
+}
+
+async function onLeadSubmit(e) {
+  e.preventDefault();
+
+  const form = e.target;
+  const root = form.closest(".lead-form-bubble") || form.parentElement;
+  const statusEl = root.querySelector("#lead-status");
+  const submitBtn = form.querySelector(".lead-submit");
+  if (submitBtn) submitBtn.disabled = true;
+
+  const data = Object.fromEntries(new FormData(form).entries());
+  if (data.email) data.email = data.email.toLowerCase().trim();
+
+  const nameOK = /^[A-Za-z ]+$/.test(data.name || "");
+  const posOK = /^[A-Za-z ]+$/.test(data.position || "");
+  const roleOK = !data.role || /^[A-Za-z. ]+$/.test(data.role || "");
+  if (!data.name || !data.email || !data.company || !data.position) {
+    statusEl.textContent = "Please complete all required fields.";
+    if (submitBtn) submitBtn.disabled = false;
+    return;
+  }
+  if (!nameOK) {
+    statusEl.textContent = "Name must contain letters and spaces only.";
+    if (submitBtn) submitBtn.disabled = false;
+    return;
+  }
+  if (!posOK) {
+    statusEl.textContent = "Position must contain letters and spaces only.";
+    if (submitBtn) submitBtn.disabled = false;
+    return;
+  }
+  if (!roleOK) {
+    statusEl.textContent =
+      "Role may include letters, periods, and spaces only.";
+    if (submitBtn) submitBtn.disabled = false;
+    return;
+  }
+
+  statusEl.textContent = "Submitting…";
+
+  try {
+    const res = await fetch(`${API_BASE}/api/lead`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    const json = await res.json().catch(() => ({}));
+    if (!res.ok || !json.ok)
+      throw new Error(json.error || `HTTP ${res.status}`);
+
+    // thank-you
+    const msgs = [
+      "Perfect, thanks for sharing. Carrying on!",
+      "Thanks! Got it — let’s continue.",
+      "Appreciate it. You’re all set — continuing…",
+      "Thank you — I’ve saved that. Let’s proceed.",
+    ];
+    addMessage("bot", msgs[Math.floor(Math.random() * msgs.length)]);
+
+    // ✅ allow chatting again
+    __leadGateActive = false;
+    disableChatInput(false);
+
+    // resume queued message if any
+    if (typeof __queuedSecondMessage === "string" && __queuedSecondMessage) {
+      const queued = __queuedSecondMessage;
+      __queuedSecondMessage = null;
+      addMessage("user", queued);
+
+      const chatRes = await fetch(CHAT_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: queued,
+          history: window.__chatHistory || "",
+        }),
+      });
+      if (!chatRes.ok) throw new Error(`Chat HTTP ${chatRes.status}`);
+      const data2 = await chatRes.json();
+      window.__chatHistory = data2.updatedHistory || "";
+      addMessage("bot", data2.reply || "Sorry—no reply.");
+      setOnlineUI?.();
+    }
+
+    statusEl.textContent = "";
+  } catch (err) {
+    statusEl.textContent = `Error: ${err.message || err}`;
+    if (submitBtn) submitBtn.disabled = false; // user can retry submit
+    // keep chat disabled until a successful submit
+    setOfflineUI?.();
+  }
+}
+
+
+function randomThanks() {
+  const msgs = [
+    "Thanks! Got it — let’s continue.",
+    "Appreciate it. You’re all set — continuing…",
+    "Perfect, thanks for sharing. Carrying on!",
+    "Thank you — I’ve saved that. Let’s proceed.",
+  ];
+  return msgs[Math.floor(Math.random() * msgs.length)];
 }

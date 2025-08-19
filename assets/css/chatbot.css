@@ -448,3 +448,90 @@
   75%  { content: '...'; }
   100% { content: ''; }
 }
+
+
+.lead-form-bubble {
+  max-width: 100%;
+}
+.lead-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 16px;
+  margin-top: 8px;
+}
+.lead-field { display: flex; flex-direction: column; }
+.lead-field label { font-size: 12px; opacity: 0.8; margin-bottom: 4px; }
+.lead-field input {
+  padding: 8px 10px; border-radius: 8px; border: 1px solid rgba(0,0,0,.1);
+}
+.lead-submit {
+  grid-column: 1 / -1;
+  padding: 10px 14px; border-radius: 10px; border: none; cursor: pointer;
+}
+.lead-status { margin-top: 6px; font-size: 12px; opacity: .9; }
+.lead-form input {
+  text-transform: none !important;
+}
+
+.msg-row.bot .lead-form-bubble {
+  margin: 14px 10px 16px 10px;   /* top, sides, bottom */
+  padding: 16px 18px;
+  border-radius: 12px;
+}
+
+/* Headline/subcopy spacing */
+.lead-copy { margin-top: 8px; margin-bottom: 12px; }
+
+/* Grid and inputs already defined earlier; add extra breathing room */
+.lead-form { gap: 12px 18px; }
+.lead-submit { margin-top: 8px; }
+.lead-status { margin-top: 12px; }
+
+/* Ensure inputs never auto-capitalize visually */
+.lead-form input { text-transform: none !important; }
+
+/* --- Lead form popup & field animations --- */
+
+/* Bubble scale/opacity in */
+.lead-form-bubble {
+  transform-origin: 16% 0%;
+  animation: lead-pop 320ms cubic-bezier(.2,.8,.2,1) both;
+}
+
+@keyframes lead-pop {
+  0%   { opacity: 0; transform: scale(.96) translateY(6px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* Staggered fade-up for each row + submit */
+.lead-form .lead-field,
+.lead-form .lead-submit {
+  opacity: 0;
+  transform: translateY(6px);
+  animation: lead-fadeup 380ms ease-out both;
+  animation-delay: var(--delay, 0ms);
+}
+
+@keyframes lead-fadeup {
+  to { opacity: 1; transform: none; }
+}
+
+/* Focus micro-interactions */
+.lead-form input {
+  transition: border-color .2s ease, box-shadow .2s ease, transform .08s ease;
+}
+
+.lead-form input:focus {
+  outline: none;
+  border-color: rgba(255,255,255,.35);
+  box-shadow: 0 0 0 3px rgba(255,255,255,.12);
+  transform: translateY(-1px);
+}
+
+/* Button micro-interactions */
+.lead-submit {
+  transition: transform .08s ease, opacity .2s ease;
+}
+
+.lead-submit:hover:not(:disabled) { transform: translateY(-1px); }
+.lead-submit:active:not(:disabled) { transform: translateY(0); }
