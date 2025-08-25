@@ -535,3 +535,35 @@
 
 .lead-submit:hover:not(:disabled) { transform: translateY(-1px); }
 .lead-submit:active:not(:disabled) { transform: translateY(0); }
+
+/* Speak button custom style */
+#speakLastBtn {
+  background-color: #ff0000;   /* light blue example */
+  color: #000;                 /* button text color */
+  border: none;                /* remove default border */
+  border-radius:30px;          /* rounded corners */
+  padding: 8px 14px;           /* adjust spacing */
+  cursor: pointer;
+}
+
+/* Optional: hover effect */
+#speakLastBtn:hover {
+  background-color: #000000;   /* darker blue on hover */
+  color: #fff;                 /* switch text to white */
+}
+
+.voicebtn{
+  background-color: #333;
+  align-items: center;
+  padding-left: 6px;
+  padding-right: 6px; 
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+#speakLastBtn img {
+  width: 22px;   /* adjust size here */
+  height: 22px;  /* keep square */
+  display: block;
+}
+

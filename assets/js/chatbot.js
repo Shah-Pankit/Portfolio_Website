@@ -107,6 +107,8 @@ function addMessage(sender, text) {
   if (sender === "bot") {
     const isHTMLList = text.includes("<ul>") && text.includes("<li>");
     processed = isHTMLList ? text : convertMarkdownToHtml(text);
+    rememberLastBot(text);
+
   }
   const linkified = linkifyText(processed);
 
@@ -305,8 +307,8 @@ function typeWordsAsync(el, htmlText, wordDelay = 99) {
 async function typeListAsync(
   msgBubble,
   ulHTML,
-  itemWordDelay = 26,
-  gapBetweenItems = 120
+  itemWordDelay = 12, //26
+  gapBetweenItems = 1000 //120
 ) {
   const wrapper = document.createElement("div");
   wrapper.innerHTML = ulHTML.trim();
@@ -834,3 +836,57 @@ function randomThanks() {
   ];
   return msgs[Math.floor(Math.random() * msgs.length)];
 }
+
+
+/* === TTS: speak only the last bot message === */
+let __lastBotText = "";
+
+// Call this when you append a bot message
+function rememberLastBot(text) {
+  __lastBotText = (text || "").trim();
+}
+
+// Prefer Microsoft Mark (Windows). Fallback to en-US, then any English, then any voice.
+function getMarkVoice() {
+  const voices = window.speechSynthesis.getVoices() || [];
+  let v = voices.find(v => v.name === "Microsoft Mark - English (United States)");
+  if (v) return v;
+  v = voices.find(v => v.lang === "en-US") ||
+      voices.find(v => (v.lang || "").toLowerCase().startsWith("en")) ||
+      voices[0];
+  return v || null;
+}
+
+// Ensure voices are loaded
+window.speechSynthesis.onvoiceschanged = () => { getMarkVoice(); };
+
+// Wire button click
+(function wireSpeakLastBot() {
+  const btn = document.getElementById("speakLastBtn");
+  if (!btn) return;
+  btn.addEventListener("click", () => {
+    if (!__lastBotText) return;
+
+    // Sanitize/normalize for speech (no HTML, nicer phrasing)
+    let spoken = __lastBotText
+      .replace(/<[^>]+>/g, " ") // strip any HTML tags like <li>, </ol>
+      .replace(/\bAI\/ML\b/gi, "AI and ML") // say "AI and ML" instead of "AI slash ML"
+      .replace(/[•·▪︎◦]/g, " ") // bullets to spaces
+      .replace(/\s*\n+\s*/g, ". ") // newlines -> short pause
+      .replace(/\s{2,}/g, " ") // collapse spaces
+      .trim();
+
+    const u = new SpeechSynthesisUtterance(spoken);
+    const v = getMarkVoice();
+    if (v) {
+      u.voice = v;
+      u.lang = v.lang;
+    }
+    u.rate = 1;
+    u.pitch = 1;
+    u.volume = 1;
+
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(u);
+  });
+})();
