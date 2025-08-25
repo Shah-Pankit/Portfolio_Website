@@ -443,8 +443,17 @@
       aria-label="Message"
     />
     <button type="submit" class="send">Send</button>
-    <div class="voicebtn"><button id="speakLastBtn" type="button"><img src=".\assets\images\images.png" alt="Voice Over"></button></div>
+    <div class="voicebtn"><button id="speakLastBtn" type="button"><img src="./assets/images/images.png" alt="Voice Over"></button></div>
   </form>
+    <!-- Floating TTS controls (hidden by default) -->
+  <div id="ttsControls" class="tts-controls" hidden>
+    <button id="ttsPauseBtn" type="button" aria-pressed="false" title="Pause/Resume"> 
+      <img id="ttsPauseIcon" src="./assets/images/pause.png" alt="Pause/Resume"> 
+    </button>
+    <button id="ttsStopBtn"  type="button" title="Stop"> 
+      <img src="./assets/images/stop.png" alt="Stop"> 
+    </button>
+  </div>
 </div>
 
 <!-- <div id="chatbot-toggle" onclick="toggleChatbot()">💬</div>

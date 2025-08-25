@@ -128,8 +128,13 @@ function addMessage(sender, text) {
 
     // keep chat scrolled while typing
     const msgContainer = document.getElementById("chat-messages");
+    function isNearBottom(el, threshold = 32) {
+      return el.scrollHeight - (el.scrollTop + el.clientHeight) <= threshold;
+    }
     const keepScroll = setInterval(() => {
-      if (msgContainer) msgContainer.scrollTop = msgContainer.scrollHeight;
+      if (msgContainer && isNearBottom(msgContainer)) {
+        msgContainer.scrollTop = msgContainer.scrollHeight;
+      }
     }, 50);
 
     const finish = () => clearInterval(keepScroll);
@@ -860,6 +865,54 @@ function getMarkVoice() {
 // Ensure voices are loaded
 window.speechSynthesis.onvoiceschanged = () => { getMarkVoice(); };
 
+// === Floating TTS controls (Pause/Resume + Stop) ===
+let currentUtterance = null;
+
+const ttsControls = document.getElementById('ttsControls');
+const ttsPauseBtn  = document.getElementById('ttsPauseBtn');
+const ttsStopBtn   = document.getElementById('ttsStopBtn');
+const ttsPauseIcon = document.getElementById("ttsPauseIcon");
+
+function showTTSControls() {
+  if (ttsControls) ttsControls.hidden = false;
+  if (ttsPauseBtn) ttsPauseBtn.setAttribute("aria-pressed", "false"); // playing
+  if (ttsPauseIcon) ttsPauseIcon.src = "./assets/images/pause.png";
+  if (ttsPauseBtn) ttsPauseBtn.title = "Pause";
+}
+
+function hideTTSControls() {
+  if (ttsControls) ttsControls.hidden = true;
+  if (ttsPauseBtn) ttsPauseBtn.setAttribute("aria-pressed", "false");
+  if (ttsPauseIcon) ttsPauseIcon.src = "./assets/images/pause.png"; // reset to pause for next start
+  if (ttsPauseBtn) ttsPauseBtn.title = "Pause";
+  currentUtterance = null;
+}
+
+// Pause/Resume toggle
+ttsPauseBtn?.addEventListener("click", () => {
+  if (!("speechSynthesis" in window)) return;
+  if (speechSynthesis.speaking && !speechSynthesis.paused) {
+    // Going to paused state
+    speechSynthesis.pause();
+    ttsPauseBtn.setAttribute("aria-pressed", "true");
+    if (ttsPauseIcon) ttsPauseIcon.src = "./assets/images/play.png";
+    ttsPauseBtn.title = "Resume";
+  } else if (speechSynthesis.paused) {
+    // Resuming playback
+    speechSynthesis.resume();
+    ttsPauseBtn.setAttribute("aria-pressed", "false");
+    if (ttsPauseIcon) ttsPauseIcon.src = "./assets/images/pause.png";
+    ttsPauseBtn.title = "Pause";
+  }
+});
+
+// Stop
+ttsStopBtn?.addEventListener('click', () => {
+  if (!('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  hideTTSControls();
+});
+
 // Wire button click
 (function wireSpeakLastBot() {
   const btn = document.getElementById("speakLastBtn");
@@ -875,6 +928,8 @@ window.speechSynthesis.onvoiceschanged = () => { getMarkVoice(); };
       .replace(/\s*\n+\s*/g, ". ") // newlines -> short pause
       .replace(/\s{2,}/g, " ") // collapse spaces
       .trim();
+    // Cancel any ongoing speech and build a fresh utterance
+    window.speechSynthesis.cancel();
 
     const u = new SpeechSynthesisUtterance(spoken);
     const v = getMarkVoice();
@@ -886,7 +941,21 @@ window.speechSynthesis.onvoiceschanged = () => { getMarkVoice(); };
     u.pitch = 1;
     u.volume = 1;
 
-    window.speechSynthesis.cancel();
+    // Show controls while speaking; hide when done
+    u.onstart = () => {
+      currentUtterance = u;
+      showTTSControls();
+    };
+    u.onend = () => {
+      hideTTSControls();
+    };
+    u.oncancel = () => {
+      hideTTSControls();
+    };
+    u.onerror = () => {
+      hideTTSControls();
+    };
+    
     window.speechSynthesis.speak(u);
   });
 })();

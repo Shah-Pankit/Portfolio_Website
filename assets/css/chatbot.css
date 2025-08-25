@@ -567,3 +567,47 @@
   display: block;
 }
 
+
+/* Floating TTS controls (only visible during speech) */
+.tts-controls[hidden] { display: none !important; }
+
+.tts-controls {
+  position: absolute;
+  right: 12px;
+  bottom: 64px;             /* sits above your voice button */
+  display: flex;
+  gap: 8px;
+  z-index: 10000;
+}
+
+.tts-controls button {
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.25);
+  background: rgba(0,0,0,.35);
+  backdrop-filter: blur(6px);
+  color: inherit;
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .tts-controls button { width: 44px; height: 44px; }
+}
+
+/* Resize and center the pause/play icons */
+#ttsPauseBtn img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;     /* keeps aspect ratio */
+  display: block;          /* removes inline gap */
+  margin: 0 auto;          /* centers horizontally */
+}
+
+#ttsStopBtn img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+}
