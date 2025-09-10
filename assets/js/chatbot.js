@@ -95,7 +95,7 @@ function addMessage(sender, text) {
 
   const avatar = document.createElement("img");
   avatar.src =
-    sender === "user" ? "assets/images/user.png" : "assets/images/hero.png";
+    sender === "user" ? "../assets/images/user.png" : "../assets/images/hero.png";
   avatar.alt = `${sender} avatar`;
   avatar.className = "chat-avatar";
 
@@ -876,14 +876,14 @@ const ttsPauseIcon = document.getElementById("ttsPauseIcon");
 function showTTSControls() {
   if (ttsControls) ttsControls.hidden = false;
   if (ttsPauseBtn) ttsPauseBtn.setAttribute("aria-pressed", "false"); // playing
-  if (ttsPauseIcon) ttsPauseIcon.src = "./assets/images/pause.png";
+  if (ttsPauseIcon) ttsPauseIcon.src = "../assets/images/pause.png";
   if (ttsPauseBtn) ttsPauseBtn.title = "Pause";
 }
 
 function hideTTSControls() {
   if (ttsControls) ttsControls.hidden = true;
   if (ttsPauseBtn) ttsPauseBtn.setAttribute("aria-pressed", "false");
-  if (ttsPauseIcon) ttsPauseIcon.src = "./assets/images/pause.png"; // reset to pause for next start
+  if (ttsPauseIcon) ttsPauseIcon.src = "../assets/images/pause.png"; // reset to pause for next start
   if (ttsPauseBtn) ttsPauseBtn.title = "Pause";
   currentUtterance = null;
 }
@@ -895,13 +895,13 @@ ttsPauseBtn?.addEventListener("click", () => {
     // Going to paused state
     speechSynthesis.pause();
     ttsPauseBtn.setAttribute("aria-pressed", "true");
-    if (ttsPauseIcon) ttsPauseIcon.src = "./assets/images/play.png";
+    if (ttsPauseIcon) ttsPauseIcon.src = "../assets/images/play.png";
     ttsPauseBtn.title = "Resume";
   } else if (speechSynthesis.paused) {
     // Resuming playback
     speechSynthesis.resume();
     ttsPauseBtn.setAttribute("aria-pressed", "false");
-    if (ttsPauseIcon) ttsPauseIcon.src = "./assets/images/pause.png";
+    if (ttsPauseIcon) ttsPauseIcon.src = "../assets/images/pause.png";
     ttsPauseBtn.title = "Pause";
   }
 });

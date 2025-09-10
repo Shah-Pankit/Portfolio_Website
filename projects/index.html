@@ -114,38 +114,47 @@
     <!-- scroll back to top -->
 
     <!-- 🧠 Chatbot Trigger -->
+<div id="chat-icon" onclick="toggleChat()" title="Pankit's bot">
+  <img src="../assets/images/live-chat.png" class="chatimg" alt="Open chat">
+</div>
 
-    <div id="chat-icon" onclick="toggleChat()" title="Chat with me">
-      <img src="/assets/images/live-chat.png" class="chatimg" />
-    </div>
-
-    <!-- 🧠 Chatbot Window -->
-    <div id="chat-window" class="hidden">
-      <div id="chat-header">
-        <div class="chat-header-text">
-          <span class="chat-title">Pankit's Bot</span>
-          <div id="chat-status" class="chat-status" aria-live="polite">
-            <span class="status-dot" aria-hidden="true"></span>
-            <span class="status-label">checking…</span>
-          </div>
-        </div>
-        <button onclick="toggleChat()" aria-label="Close chat">×</button>
+<!-- 🧠 Chatbot Window -->
+<div id="chat-window" class="hidden">
+  <div id="chat-header">
+    <div class="chat-header-text">
+      <span class="chat-title">Pankit's Bot</span>
+      <div id="chat-status" class="chat-status" aria-live="polite">
+        <span class="status-dot" aria-hidden="true"></span>
+        <span class="status-label">checking…</span>
       </div>
-
-      <div id="chat-messages"></div>
-
-      <form id="chat-form" onsubmit="sendMessage(event)">
-        <input
-          type="text"
-          id="user-input"
-          placeholder="Type your message..."
-          required
-          autocomplete="off"
-          aria-label="Message"
-        />
-        <button type="submit">Send</button>
-      </form>
     </div>
+    <button onclick="toggleChat()" aria-label="Close chat">×</button>
+  </div>
+
+  <div id="chat-messages"></div>
+
+  <form id="chat-form" onsubmit="sendMessage(event)">
+    <input
+      type="text"
+      id="user-input"
+      placeholder="Type your message..."
+      required
+      autocomplete="off"
+      aria-label="Message"
+    />
+    <button type="submit" class="send">Send</button>
+    <div class="voicebtn"><button id="speakLastBtn" type="button"><img src="../assets/images/images.png" alt="Voice Over"></button></div>
+  </form>
+    <!-- Floating TTS controls (hidden by default) -->
+  <div id="ttsControls" class="tts-controls" hidden>
+    <button id="ttsPauseBtn" type="button" aria-pressed="false" title="Pause/Resume"> 
+      <img id="ttsPauseIcon" src="../assets/images/pause.png" alt="Pause/Resume"> 
+    </button>
+    <button id="ttsStopBtn"  type="button" title="Stop"> 
+      <img src="../assets/images/stop.png" alt="Stop"> 
+    </button>
+  </div>
+</div>
 
     <!-- ==== ALL MAJOR JAVASCRIPT CDNS STARTS ==== -->
     <!-- jquery cdn -->
