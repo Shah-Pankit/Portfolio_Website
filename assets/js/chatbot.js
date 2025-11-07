@@ -3,14 +3,54 @@
 // const API_BASE = "http://127.0.0.1:8000"; // <— add
 // const HEALTH_ENDPOINT = `${API_BASE}/health`;
 
+// === Chat API endpoints (Render)===
+
 const API_BASE = "https://my-portfolio-website-bot-backend.onrender.com";
 const CHAT_ENDPOINT = `${API_BASE}/api/chat`;
 const HEALTH_ENDPOINT = `${API_BASE}/health`;
+
+// === Chat API endpoints (Vercel) ===
+
+// const API_BASE = "my-portfolio-website-bot-backend-j4k68r805.vercel.app";
+// const CHAT_ENDPOINT = `${API_BASE}/api/chat`;
+// const HEALTH_ENDPOINT = `${API_BASE}/health`;
 
 // === Chat UI ===
 function toggleChat() {
   const chatWindow = document.getElementById("chat-window");
   chatWindow.classList.toggle("hidden");
+  if (!chatWindow.classList.contains("hidden")) {
+    setTimeout(showOfflineGreeting, 100);
+  }
+}
+
+// Show offline message when chat opens if bot is offline
+let hasShownOfflineGreeting = false;
+
+function showOfflineGreeting() {
+  if (hasShownOfflineGreeting) return;
+  const msgContainer = document.getElementById("chat-messages");
+  if (!msgContainer || msgContainer.children.length > 0) return;
+
+  const statusEl = document.getElementById("chat-status");
+  const isOffline = statusEl && statusEl.classList.contains("offline");
+
+  if (isOffline) {
+    hasShownOfflineGreeting = true;
+    const wrapper = document.createElement("div");
+    wrapper.className = "chat-message-wrapper bot";
+    const avatar = document.createElement("img");
+    avatar.src = "../assets/images/hero.png";
+    avatar.alt = "bot avatar";
+    avatar.className = "chat-avatar";
+    const msgBubble = document.createElement("div");
+    msgBubble.className = "bot-message";
+    msgBubble.innerHTML = `Sorry for the inconvenience — I'm currently undergoing a quick tune-up to serve you better. Please check back soon; I'll be up and running shortly!<br><br>Meanwhile, you can contact Pankit directly here:<br><br><button class="contact-pankit-btn" onclick="document.getElementById('contact')?.scrollIntoView({behavior:'smooth'});toggleChat();">Contact Pankit</button>`;
+    wrapper.appendChild(msgBubble);
+    wrapper.appendChild(avatar);
+    msgContainer.appendChild(wrapper);
+    msgContainer.scrollTop = msgContainer.scrollHeight;
+  }
 }
 
 async function sendMessage(event) {
@@ -50,7 +90,22 @@ async function sendMessage(event) {
     addMessage("bot", data.reply || "Sorry—no reply.");
     setOnlineUI?.();
   } catch (err) {
-    addMessage("bot", "Sorry—something went wrong. Please try again.");
+    const msgContainer = document.getElementById("chat-messages");
+    if (msgContainer) {
+      const wrapper = document.createElement("div");
+      wrapper.className = "chat-message-wrapper bot";
+      const avatar = document.createElement("img");
+      avatar.src = "../assets/images/hero.png";
+      avatar.alt = "bot avatar";
+      avatar.className = "chat-avatar";
+      const msgBubble = document.createElement("div");
+      msgBubble.className = "bot-message";
+      msgBubble.innerHTML = `I’m currently getting a quick refresh to serve you better. Please check back shortly — I’ll be up and running again soon!<br><br>Meanwhile, you can contact Pankit directly here:<br><br><button class="contact-pankit-btn" onclick="document.getElementById('contact')?.scrollIntoView({behavior:'smooth'});toggleChat();">Contact Pankit</button>`;
+      wrapper.appendChild(msgBubble);
+      wrapper.appendChild(avatar);
+      msgContainer.appendChild(wrapper);
+      msgContainer.scrollTop = msgContainer.scrollHeight;
+    }
     setOfflineUI?.();
   }
 }
@@ -346,6 +401,8 @@ async function typeListAsync(
     if (isChatOpen()) return false;
     if (shownCount >= maxPerSess) return false;
     if (Date.now() - lastShownAt < MIN_GAP_MS) return false; // cooldown
+    const statusEl = document.getElementById("chat-status");
+    if (statusEl && statusEl.classList.contains("offline")) return false; // don't show nudges when offline
     return true;
   }
 
@@ -685,3 +742,19 @@ ttsStopBtn?.addEventListener("click", () => {
     window.speechSynthesis.speak(u);
   });
 })();
+
+// Close chat when clicking outside
+document.addEventListener("click", (e) => {
+  const chatWindow = document.getElementById("chat-window");
+  const chatIcon = document.getElementById("chat-icon");
+
+  if (!chatWindow || !chatIcon) return;
+
+  const isClickInsideChat = chatWindow.contains(e.target);
+  const isClickOnIcon = chatIcon.contains(e.target);
+  const isChatOpen = !chatWindow.classList.contains("hidden");
+
+  if (isChatOpen && !isClickInsideChat && !isClickOnIcon) {
+    chatWindow.classList.add("hidden");
+  }
+});
