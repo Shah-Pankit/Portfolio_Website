@@ -1,11 +1,11 @@
 // === Chat API endpoints ===
-const CHAT_ENDPOINT = "http://127.0.0.1:8000/api/chat"; // <— change to local
-const API_BASE = "http://127.0.0.1:8000"; // <— add
-const HEALTH_ENDPOINT = `${API_BASE}/health`;
-
-// const API_BASE = "https://my-portfolio-website-bot-backend.onrender.com";
-// const CHAT_ENDPOINT = `${API_BASE}/api/chat`;
+// const CHAT_ENDPOINT = "http://127.0.0.1:8000/api/chat"; // <— change to local
+// const API_BASE = "http://127.0.0.1:8000"; // <— add
 // const HEALTH_ENDPOINT = `${API_BASE}/health`;
+
+const API_BASE = "https://my-portfolio-website-bot-backend.onrender.com";
+const CHAT_ENDPOINT = `${API_BASE}/api/chat`;
+const HEALTH_ENDPOINT = `${API_BASE}/health`;
 
 // === Chat UI ===
 function toggleChat() {
