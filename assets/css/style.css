@@ -839,6 +839,14 @@ header .navbar ul li a:hover {
   background-color: #f68c09;
   position: relative;
   border-radius: 6px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  padding-bottom: 1rem;
+}
+.experience .content:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  padding-bottom: 1rem;
 }
 .experience .content .tag {
   font-size: 1.3rem;
@@ -847,7 +855,7 @@ header .navbar ul li a:hover {
 }
 .experience .content .desc {
   margin-left: 1.5rem;
-  padding-bottom: 1rem;
+  padding-bottom: 1.5rem;
 }
 .experience .content .desc h3 {
   font-size: 1.5rem;
@@ -855,6 +863,43 @@ header .navbar ul li a:hover {
 }
 .experience .content .desc p {
   font-size: 1.2rem;
+}
+.experience .content .work-details {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: all 0.4s ease;
+  margin: 0 1.5rem 1.5rem 1.5rem;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+}
+.experience .content:hover .work-details {
+  max-height: 500px;
+  opacity: 1;
+  margin-top: 0.5rem;
+  padding: 1.5rem;
+}
+.experience .content .work-details ul {
+  list-style: none;
+  padding: 0;
+}
+.experience .content .work-details ul li {
+  font-size: 1.4rem;
+  padding: 0.8rem 0;
+  padding-left: 2rem;
+  position: relative;
+  text-transform: none;
+  color: #1a1a1a;
+  font-weight: 500;
+  line-height: 1.6;
+}
+.experience .content .work-details ul li::before {
+  content: "▸";
+  position: absolute;
+  left: 0;
+  color: #2c2c2c;
+  font-weight: bold;
+  font-size: 1.6rem;
 }
 /* view all button */
 .morebtn {
@@ -1083,7 +1128,6 @@ form .button-area {
     width: 100%;
     margin-right: 2rem;
   }
-
 }
 /* contact section media queries ends */
 /* contact section ends */
